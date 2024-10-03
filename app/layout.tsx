@@ -5,7 +5,7 @@ import "./globals.css";
 const comfortaa = Comfortaa({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "KobotAI - waitlist page",
+  title: "Kobot AI - waitlist page",
   description: "The AI chatbot infrastructure for locals",
 };
 
