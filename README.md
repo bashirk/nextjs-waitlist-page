@@ -18,12 +18,12 @@ This project is a fork of the [Next.js + EmailOctopus wait list page](https://gi
 
 - Install dependencies
   ```bash
-  npm install
+  bun install
   ```
 - Set up Google Sheets API:
 
   - Create a Google Cloud project and enable the Google Sheets API.
-  - Set up a service account, download the credentials JSON file, and place it in the `app/api/submit` directory.
+  - Set up a service account, download the credentials JSON file, and copy the private key value and paste it in the `GOOGLE_PRIVATE_KEY` variable in the `.env` file, repeat the same for the `GOOGLE_CLIENT_EMAIL` variable.
   - Share the target Google Sheet with the service account email.
 
 ## Deployment
