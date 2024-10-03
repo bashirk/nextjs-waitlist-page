@@ -24,7 +24,7 @@ export default function EmailForm() {
 
       if (response.ok) {
         setEmail("");
-        toast.success("Thank you for joining our waitlist! 🚀");
+        toast.success("Thank you for joining the waitlist! 🚀");
       } else {
         setEmail("");
         toast.error("Oops! Something went wrong!");
@@ -65,8 +65,7 @@ export default function EmailForm() {
       <div className="flex items-start gap-2 text-gray-500">
         <InfoCircledIcon />
         <p className="text-xs -mt-[0.5] max-w-sm">
-          No worries! your data is completely safe and will only be utilized to
-          provide you with updates about our product.
+          Access is limited! If selected, you'll receive an email to join us.
         </p>
       </div>
     </>

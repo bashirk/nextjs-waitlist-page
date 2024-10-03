@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   try {
     const response = await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.SPREADSHEET_ID,
-      range: 'Eazy!B2:B',
+      range: 'Kobot!B2:B',
       valueInputOption: 'USER_ENTERED',
       requestBody: {
         values: [[email]],
