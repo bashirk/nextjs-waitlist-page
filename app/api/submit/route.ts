@@ -4,27 +4,28 @@ export async function POST(request: Request) {
   const { email } = await request.json();
 
   const auth = new google.auth.GoogleAuth({
-    keyFile: 'app/api/submit/service-account-c96d64a0c721.json',
+    credentials: {
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'), // To replace \n with actual newlines
+    },
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   });
-  
+
   const sheets = google.sheets({ version: 'v4', auth });
 
   try {
     const response = await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.NEXT_PUBLIC_SPREADSHEET_ID, // Your spreadsheet ID
-      range: 'Sheet1!B2:B', // The range you want to write to
+      spreadsheetId: process.env.SPREADSHEET_ID,
+      range: 'Eazy!B2:B',
       valueInputOption: 'USER_ENTERED',
       requestBody: {
         values: [[email]],
       },
     });
 
-    return new Response('Email submitted to Google Sheets successfully!', {
-      status: 200,
-    });
+    return new Response('Success');
   } catch (error) {
-    console.error(error);
-    return new Response('Failed to submit email to Google Sheets!', { status: 500 });
+    console.error('Google Sheets API error:', error);
+    return new Response('Failed', { status: 500 });
   }
 }
