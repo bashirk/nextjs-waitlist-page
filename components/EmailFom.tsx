@@ -4,7 +4,8 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 
 export default function EmailForm() {
-  const [email, setEmail] = useState<string>();
+  const [email, setEmail] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -12,6 +13,7 @@ export default function EmailForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/submit", {
@@ -26,14 +28,17 @@ export default function EmailForm() {
         setEmail("");
         toast.success("Thank you for joining the waitlist! 🚀");
       } else {
-        setEmail("");
-        toast.error("Oops! Something went wrong!");
+        const errorData = await response.json();
+        toast.error(errorData.message || "Oops! Something went wrong!");
       }
     } catch (err) {
-      setEmail("");
       console.error(err);
+      toast.error("Network error. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
     <>
       <form onSubmit={handleSubmit} method="POST" className="mt-2 max-w-sm">
@@ -52,18 +57,23 @@ export default function EmailForm() {
             type="email"
             value={email}
             onChange={handleEmailChange}
+            aria-label="Enter your email address"
           />
           <button
-            className="flex h-10 shrink-0 items-center justify-center gap-1 rounded-lg bg-[#000F2D] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-zinc-700"
+            className={`flex h-10 shrink-0 items-center justify-center gap-1 rounded-lg bg-[#000F2D] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-zinc-700 ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             type="submit"
+            disabled={isLoading}
+            aria-busy={isLoading}
           >
-            <span>Join the waitlist</span>
+            <span>{isLoading ? "Submitting..." : "Join the waitlist"}</span>
           </button>
         </div>
       </form>
 
       <div className="flex items-start gap-2 text-gray-500">
-        <InfoCircledIcon />
+        <InfoCircledIcon aria-hidden="true" />
         <p className="text-xs -mt-[0.5] max-w-sm">
           Access is limited! If selected, you'll receive an email to join us.
         </p>
